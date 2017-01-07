@@ -10,12 +10,18 @@ implement ToyVpn in native golang shared libraries.
 
 ## Build
 for apk:
+> $ cd jni/
+> $ sh build.sh
+> $ cd ..
 > $ ./gradlew build --info
+
+apk file will at: `build/outputs/apk/`
 
 
 for server:
 > $ cd server/golang/
-> $ sh build.sh
+> $ git clone https://github.com/songgao/water.git
+> $ go build server.go
 
 
 ## Run
