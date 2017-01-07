@@ -4,6 +4,10 @@ Go ToyVpn
 implement ToyVpn in native golang shared libraries.
 
 
+## Different between original ToyVpn
+1. call native golang shared library
+2. go through TCP, not UDP
+
 ## Build
 for apk:
 > $ ./gradlew build --info
