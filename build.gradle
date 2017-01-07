@@ -1,0 +1,96 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.3'
+    }
+}
+apply plugin: 'com.android.application'
+
+task askForPasswords << {
+    // Must create String because System.readPassword() returns char[]
+    // (and assigning that below fails silently)
+    println ''
+    println 'Keystore password: '
+    def storePw = new String(System.console().readPassword("Keystore password: "))
+    def keyPw  = new String(System.console().readPassword("Key password: "))
+
+    android.signingConfigs.release.storePassword = storePw
+    android.signingConfigs.release.keyPassword = keyPw
+}
+
+tasks.whenTaskAdded { theTask -> 
+    if (theTask.name.equals("packageRelease")) {
+        theTask.dependsOn "askForPasswords"
+    }
+}
+
+//task nativeLibsToJar(
+//	type: Zip,
+//	description: 'create a jar archive of the native libs') {
+//	destinationDir file("$buildDir/native-libs")
+//	baseName 'native-libs'
+//	extension 'jar'
+//	from fileTree(dir: 'libs', include: '**/*.so')
+//	into 'lib/'
+//}
+//tasks.withType(Compile) {
+//	compileTask -> compileTask.dependsOn(nativeLibsToJar)
+//}
+
+android {
+    compileSdkVersion 'android-23'
+    buildToolsVersion '24.0.2'
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("test-key.keystore")
+            storePassword "1"
+            keyAlias "test"
+            keyPassword "1"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+            signingConfig signingConfigs.release
+        }
+    }
+
+	sourceSets {
+		main {
+			jniLibs.srcDirs = ['libs']
+		}
+	}
+}
+
+dependencies {
+	// Adds the local "mylibrary" module as a dependency to the "free" flavor.
+	//freeCompile project(":mylibrary")
+
+	// Adds specific library module dependencies as compile time dependencies
+	// to the fullRelease and fullDebug build variants.
+	//fullReleaseCompile project(path: ':library', configuration: 'release')
+	//fullDebugCompile project(path: ':library', configuration: 'debug')
+
+	// Dependency on a local library module
+	//compile project(":mylibrary")
+
+	// Dependency on local binaries
+	compile fileTree(dir: 'libs', include: ['*.jar'])
+
+	// Dependency on a remote binary
+	//compile group: 'com.github.jnr', name: 'jnr-ffi', version: '2.0.9'
+}
+
+

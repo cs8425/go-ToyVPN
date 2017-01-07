@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ToyVPN</string>
+
+    <string name="address">Server Address:</string>
+    <string name="port">Server Port:</string>
+    <string name="secret">Shared Secret:</string>
+    <string name="connect">Connect!</string>
+
+    <string name="connecting">NativeToyVPN is connecting...</string>
+    <string name="connected">NativeToyVPN is connected!</string>
+    <string name="disconnected">NativeToyVPN is disconnected!</string>
+</resources>
